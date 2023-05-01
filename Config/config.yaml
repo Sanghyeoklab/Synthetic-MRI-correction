@@ -1,0 +1,26 @@
+Dataset : ../Data/Dataset.yaml
+Network : Unet
+BatchSize : 16
+num_workers : 0
+device : [5, 6]
+learningRate : 0.001
+lr_limit : 0.00001
+Epoch : 1000
+imgSize : [256, 256]
+Rotate : [-15, 15]
+Optimizer : SGD
+Scheduler : ReduceLRONPlateau
+lossfunction : MSE
+Save : ../Save/2023_05_01/
+Input : ['MAGiC T1', 'MAGiC T2', 'MAGiC PD', 'MAGiC T1 FLAIR', 'MAGiC T2 FLAIR', 'MAGiC STIR']
+Output : ['Convention method']
+Mask : True
+
+Normalize:
+  MAGiC T1: [2630.3157403984046, 745.4242092161512]
+  MAGiC T2: [2582.781394835964, 936.1311546529396]
+  MAGiC PD: [6439.062272321429, 1052.0976496719675]
+  MAGiC T1 FLAIR: [2360.9284018346657, 1147.3748747631762]
+  MAGiC T2 FLAIR: [2101.0747799218693, 573.7870175296471]
+  MAGiC STIR: [3091.191511598499, 1549.2945772008725]
+  Convention method: [648.2815970736298, 509.22572112169394]
