@@ -21,7 +21,7 @@ def list2dcm(list):
     return imgs
 
 
-class MAGiC_dataset(object):
+class Synthetic_dataset(object):
     def __init__(self, args, Mode = "Train", transform = None):
         assert Mode in ["Train", "Validation", "Test"], "Mode must be Train, Validation or Test"
         dictionary = Util.yaml2dic(args.Dataset)[Mode]
@@ -48,6 +48,6 @@ class MAGiC_dataset(object):
         return input_imgs, output_imgs, mask
     
 def Loader(args, Mode = "Train", transform = None):
-    dataset = MAGiC_dataset(args, Mode, transform)
+    dataset = Synthetic_dataset(args, Mode, transform)
     shuffle = True if Mode == "Train" else False
     return DataLoader(dataset, batch_size = args.BatchSize, num_workers = args.num_workers, drop_last=True, shuffle = shuffle)

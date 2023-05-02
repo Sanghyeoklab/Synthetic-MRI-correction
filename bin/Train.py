@@ -69,7 +69,8 @@ def Train(args):
         for x, y, mask in TrainLoader:
             x = x.cuda(non_blocking = True)
             y = y.cuda(non_blocking = True)
-            mask = mask.cuda(non_blocking = True)
+            # mask = mask.cuda(non_blocking = True)
+            mask = None
             optimizer.zero_grad()
             output = model(x)
             if mask is not None:
@@ -84,7 +85,8 @@ def Train(args):
             for x, y, mask in ValidationLoader:
                 x = x.cuda(non_blocking = True)
                 y = y.cuda(non_blocking = True)
-                mask = mask.cuda(non_blocking = True)
+                # mask = mask.cuda(non_blocking = True)
+                mask = None
                 output = model(x)
                 if mask is not None:
                     output *= (mask > 128)

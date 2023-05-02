@@ -3,7 +3,7 @@ import argparse
 import pydicom
 import Analysis_Util
 
-parser = argparse.ArgumentParser(prog = 'MAGiC', description = 'Make mask')
+parser = argparse.ArgumentParser(prog = 'Synthetic MRI artifact correction', description = 'Make mask')
 parser.add_argument('--load_dicom', help = 'load dicom', default = 'Data/dicom.dcm')
 parser.add_argument('--save_file', help = 'save mask', default = 'Save/mask.jpg')
 args = parser.parse_args()

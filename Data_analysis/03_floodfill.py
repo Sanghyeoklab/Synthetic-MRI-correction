@@ -2,7 +2,7 @@ import cv2
 import Analysis_Util
 import argparse
 
-parser = argparse.ArgumentParser(prog = 'MAGiC', description = 'Reinforce mask')
+parser = argparse.ArgumentParser(prog = 'Synthetic MRI artifact correction', description = 'Reinforce mask')
 parser.add_argument('--load_mask', help = 'load mask', default = 'Data/mask.jpg')
 parser.add_argument('--save_mask', help = 'save mask', default = 'Data/mask.jpg')
 args = parser.parse_args()

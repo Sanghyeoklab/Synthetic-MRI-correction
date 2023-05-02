@@ -5,7 +5,7 @@ import argparse
 import pydicom
 from collections import defaultdict
 
-parser = argparse.ArgumentParser(prog = 'MAGiC', description = 'Check dicom series')
+parser = argparse.ArgumentParser(prog = 'Synthetic MRI artifact correction', description = 'Check dicom series')
 parser.add_argument('--load_folder', help = 'load every dicom folders', default = 'Data/')
 args = parser.parse_args()
 
