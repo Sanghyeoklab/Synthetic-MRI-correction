@@ -11,7 +11,7 @@ def MinMax2WWWL(Wmin, Wmax):
     WL = (Wmin + Wmax) / 2
     return [WW, WL]
 
-def save_dicom(img, save_path, info_path, WWWL = None):
+def save_dicom(img, save_path, info_path, Series_description = None, WWWL = None):
     dcm = pydicom.read_file(info_path)
     img[img < 0] = 0
     img[img > 65535] = 65535
@@ -24,6 +24,9 @@ def save_dicom(img, save_path, info_path, WWWL = None):
     if WWWL is not None:
         dcm.WindowCenter = str(WWWL[0])
         dcm.WindowWidth = str(WWWL[1])
+        
+    if Series_description is not None:
+        dcm.SeriesDescription = Series_description
     dcm.save_as(save_path)
     return True
 

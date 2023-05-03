@@ -34,14 +34,12 @@ def Test(args):
     fid = open(args.Save + "test.log", "w")
     fid.write("Loss per iteration : \n")
     with torch.no_grad():
-        for i, [x, y, mask] in enumerate(tqdm(TestLoader)):
-            x = x.cuda(non_blocking = True)
-            y = y.cuda(non_blocking = True)
-            # mask = mask.cuda(non_blocking = True)
-            mask = None
+        for i, data in enumerate(tqdm(TestLoader)):
+            x = data["input imgs"].cuda(non_blocking = True)
+            y = data["output imgs"].cuda(non_blocking = True)
             output = model(x)
-            
-            if mask is not None:
+            if "mask" in data.keys():
+                mask = mask.cuda(non_blocking = True)
                 output *= (mask > 128)
                 y  *= (mask > 128)
             loss = criteria(output, y)

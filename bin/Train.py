@@ -66,14 +66,13 @@ def Train(args):
     
     for epoch in tqdm(range(1, args.Epoch + 1)):
         train_loss = 0
-        for x, y, mask in TrainLoader:
-            x = x.cuda(non_blocking = True)
-            y = y.cuda(non_blocking = True)
-            # mask = mask.cuda(non_blocking = True)
-            mask = None
+        for data in TrainLoader:
+            x = data["input imgs"].cuda(non_blocking = True)
+            y = data["output imgs"].cuda(non_blocking = True)
             optimizer.zero_grad()
             output = model(x)
-            if mask is not None:
+            if "mask" in data.keys():
+                mask = mask.cuda(non_blocking = True)
                 output *= (mask > 128)
                 y  *= (mask > 128)
             loss = criteria(output, y)
@@ -82,13 +81,12 @@ def Train(args):
             train_loss += loss / len(TrainLoader)
         validation_loss = 0
         with torch.no_grad():
-            for x, y, mask in ValidationLoader:
-                x = x.cuda(non_blocking = True)
-                y = y.cuda(non_blocking = True)
-                # mask = mask.cuda(non_blocking = True)
-                mask = None
+            for data in ValidationLoader:
+                x = data["input imgs"].cuda(non_blocking = True)
+                y = data["output imgs"].cuda(non_blocking = True)
                 output = model(x)
-                if mask is not None:
+                if "mask" in data.keys():
+                    mask = mask.cuda(non_blocking = True)
                     output *= (mask > 128)
                     y  *= (mask > 128)
                 loss = criteria(output, y)

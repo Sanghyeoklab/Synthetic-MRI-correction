@@ -15,7 +15,8 @@ class ToTensor(object):
     def __call__(self, input, output, mask):
         input = torch.Tensor(input)
         output = torch.Tensor(output) 
-        mask = torch.Tensor(mask) 
+        if mask is not None:
+            mask = torch.Tensor(mask) 
         return input, output, mask
 
 class Normalize(object):
@@ -39,7 +40,8 @@ class Resize(object):
     def __call__(self, input, output, mask):
         input = F.resize(input, self.imgSize, interpolation = InterpolationMode.BICUBIC)
         output = F.resize(output, self.imgSize, interpolation = InterpolationMode.BICUBIC)
-        mask = F.resize(mask, self.imgSize, interpolation = InterpolationMode.NEAREST)
+        if mask is not None:
+            mask = F.resize(mask, self.imgSize, interpolation = InterpolationMode.NEAREST)
         return input, output, mask
     
     
@@ -50,5 +52,6 @@ class RandRotate(object):
         random = torch.rand(1).item() * (self.rot_param[1] - self.rot_param[0]) + self.rot_param[0]
         input = F.rotate(input, random, interpolation = InterpolationMode.BILINEAR) 
         output = F.rotate(output, random, interpolation = InterpolationMode.BILINEAR) 
-        mask = F.rotate(mask, random, interpolation = InterpolationMode.BILINEAR) 
+        if mask is not None:
+            mask = F.rotate(mask, random, interpolation = InterpolationMode.BILINEAR) 
         return input, output, mask

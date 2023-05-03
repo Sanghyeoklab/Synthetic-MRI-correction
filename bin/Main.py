@@ -13,9 +13,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
     yaml_file = args.config
     args = Util.make_args(Util.yaml2dic(args.config))
-    shutil.copyfile(yaml_file, args.Save + "config.yaml")
     Train(args)
+    shutil.copyfile(yaml_file, args.Save + "config.yaml")
     Test(args)
+    
 
 
 

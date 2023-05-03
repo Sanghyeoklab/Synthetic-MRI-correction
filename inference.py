@@ -68,4 +68,4 @@ for l in tqdm(lists):
     with torch.no_grad():
         output = model(imgs).cpu().numpy()[0, 0]
     output = output * args.Normalize["Convention method"][1] + args.Normalize["Convention method"][0]
-    Util.save_dicom(output, Save_folder + l, load_folder + args.Input_path["Convention method"] + l)
+    Util.save_dicom(output, Save_folder + l, load_folder + args.Input_path["Convention method"] + l, "Deeplearning correction")
