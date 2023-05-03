@@ -37,11 +37,11 @@ def Test(args):
         for i, data in enumerate(tqdm(TestLoader)):
             x = data["input imgs"].cuda(non_blocking = True)
             y = data["output imgs"].cuda(non_blocking = True)
-            output = model(x)
             if "mask" in data.keys():
                 mask = mask.cuda(non_blocking = True)
-                output *= (mask > 128)
-                y  *= (mask > 128)
+                x *= (mask > 128)
+                y *= (mask > 128)
+            output = model(x)
             loss = criteria(output, y)
             fid.write("Itertation number : " + str(i + 1) + " ==> " + str(loss.item()) + "\n")
             total_loss += loss.item()

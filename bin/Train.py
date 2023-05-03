@@ -66,39 +66,42 @@ def Train(args):
     
     for epoch in tqdm(range(1, args.Epoch + 1)):
         train_loss = 0
+        model.module.train()
+        model.module.cuda()
         for data in TrainLoader:
             x = data["input imgs"].cuda(non_blocking = True)
             y = data["output imgs"].cuda(non_blocking = True)
-            optimizer.zero_grad()
-            output = model(x)
             if "mask" in data.keys():
                 mask = mask.cuda(non_blocking = True)
-                output *= (mask > 128)
-                y  *= (mask > 128)
+                x *= (mask > 128)
+                y *= (mask > 128)
+            optimizer.zero_grad()
+            output = model(x)
             loss = criteria(output, y)
             loss.backward()
             optimizer.step()
             train_loss += loss / len(TrainLoader)
         validation_loss = 0
+        model.module.eval()
         with torch.no_grad():
             for data in ValidationLoader:
                 x = data["input imgs"].cuda(non_blocking = True)
                 y = data["output imgs"].cuda(non_blocking = True)
-                output = model(x)
                 if "mask" in data.keys():
                     mask = mask.cuda(non_blocking = True)
-                    output *= (mask > 128)
-                    y  *= (mask > 128)
+                    x *= (mask > 128)
+                    y *= (mask > 128)
+                output = model(x)
                 loss = criteria(output, y)
                 validation_loss += loss / len(ValidationLoader)
         if(validation_loss < best):
             best = validation_loss
-            torch.save(model.state_dict(), args.Save + "Network_Parameter/Best.pth")
+            torch.save(model.module.cpu().state_dict(), args.Save + "Network_Parameter/Best.pth")
         if(args.Scheduler == "ReduceLRONPlateau"):
             scheduler.step(validation_loss)
         elif(scheduler is not None):
             scheduler.step()
-        torch.save(model.state_dict(), args.Save + "Network_Parameter/" + "0" * (digit - int(np.log10(epoch))) + str(epoch) + ".pth")
+        torch.save(model.module.cpu().state_dict(), args.Save + "Network_Parameter/" + "0" * (digit - int(np.log10(epoch))) + str(epoch) + ".pth")
         writer.add_scalar("Learning rate", optimizer.param_groups[0]['lr'], epoch)
         writer.add_scalar("Loss/train", train_loss, epoch)
         writer.add_scalar("Loss/validation", validation_loss, epoch)
