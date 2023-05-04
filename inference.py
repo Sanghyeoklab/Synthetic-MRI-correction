@@ -46,7 +46,6 @@ if Save_folder[-1] != "/":
 os.makedirs(Save_folder, exist_ok=True)
 args = Util.make_args(Util.yaml2dic(args.config))
 
-args.device = [1, 2]
 os.environ["CUDA_VISIBLE_DEVICES"] = ",".join(str(x) for x in args.device)
 
 model = Create_model(args)

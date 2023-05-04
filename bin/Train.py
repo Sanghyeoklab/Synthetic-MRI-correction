@@ -42,13 +42,10 @@ def Train(args):
     TrainLoader = Loader(args, Mode = "Train", transform = train_transform)
     ValidationLoader = Loader(args, Mode = "Validation", transform = validation_transform)
     model = Create_model(args)
-    model = torch.nn.DataParallel(model.cuda())
-    
-    
     optimizer = get_optimizer(model, args)
     scheduler = get_scheduler(args, optimizer)
     criteria = get_lossfunction(args)
-    
+    model = torch.nn.DataParallel(model.cuda())
     
     if(args.Save[:-1] != "/"):
         args.Save = args.Save + "/"
@@ -69,6 +66,7 @@ def Train(args):
         model.module.train()
         model.module.cuda()
         for data in TrainLoader:
+            optimizer.zero_grad()
             x = data["input imgs"].cuda(non_blocking = True)
             y = data["output imgs"].cuda(non_blocking = True)
             if "mask" in data.keys():

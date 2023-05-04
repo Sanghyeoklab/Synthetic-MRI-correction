@@ -25,8 +25,9 @@ def Test(args):
     args.BatchSize = 1
     TestLoader = Loader(args, Mode = "Test", transform = test_transform)
     model = Create_model(args)
-    model = torch.nn.DataParallel(model.cuda())
     model.load_state_dict(torch.load(args.Save + "Network_Parameter/Best.pth"))
+    model = torch.nn.DataParallel(model.cuda())
+    
     
     criteria = get_lossfunction(args)
     

@@ -11,7 +11,7 @@ Rotate : [-15, 15]
 Optimizer : SGD
 Scheduler : ReduceLRONPlateau
 lossfunction : MSE
-Save : ../Save/2023_05_03/
+Save : Save/
 Input : ['T1', 'T2', 'PD', 'T1 FLAIR', 'T2 FLAIR', 'STIR']
 Output : ['Convention method']
 Mask : True 
