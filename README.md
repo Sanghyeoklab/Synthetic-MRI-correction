@@ -43,4 +43,4 @@
 
 - # 06 Inference
  ![06_Inference](https://user-images.githubusercontent.com/52817707/236796153-5e465492-221d-4d44-9bbd-5aa9904bee79.png)
- You can make artifact correction dicom data by <b>inference.py</b>. It also needs <b>yaml file</b>(--config) to get parameters, <b>load folder</b>(load_folder) for dicom path, and <b>save folder</b>(Save_folder) for saving outputs.
+ You can make artifact correction dicom data by <b>inference.py</b>. It also needs <b>yaml file</b>(--config) to get parameters, <b>load folder</b>(--load_folder) for dicom path, and <b>save folder</b>(--Save_folder) for saving outputs.
