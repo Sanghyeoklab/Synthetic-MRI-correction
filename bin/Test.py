@@ -10,10 +10,21 @@ from Dataset import Loader
 import Transform
 from Model.Create_model import Create_model
 
-def get_lossfunction(args):
-    if args.lossfunction == "MSE":
-        return nn.MSELoss()
-    
+class get_lossfunction:
+    def __init__(self, args):
+        self.args = args
+    def __call__(self, x, y, mask = None):
+        if(self.args.lossfunction == "MSE"):
+            if mask is not None:
+                return torch.mean((x[mask > 128] - y[mask > 128]) ** 2)
+            else:
+                return torch.mean((x - y) ** 2)
+        elif(self.args.lossfunction == "MAE"):
+            if mask is not None:
+                return torch.mean(torch.abs(x[mask > 128] - y[mask > 128]))
+            else:
+                return torch.mean(torch.abs(x - y))
+
 def Test(args):
     os.environ["CUDA_VISIBLE_DEVICES"] = ",".join(str(x) for x in args.device)
     test_transform = Transform.Compose([
@@ -37,13 +48,12 @@ def Test(args):
     with torch.no_grad():
         for i, data in enumerate(tqdm(TestLoader)):
             x = data["input imgs"].cuda(non_blocking = True)
-            y = data["output imgs"].cuda(non_blocking = True)
-            if "mask" in data.keys():
-                mask = mask.cuda(non_blocking = True)
-                x *= (mask > 128)
-                y *= (mask > 128)
+            y = data["target imgs"].cuda(non_blocking = True)
             output = model(x)
-            loss = criteria(output, y)
+            if "masks" in data.keys():
+                loss = criteria(output, y, data['masks'])
+            else:
+                loss = criteria(output, y)
             fid.write("Itertation number : " + str(i + 1) + " ==> " + str(loss.item()) + "\n")
             total_loss += loss.item()
     fid.write("\n\nLoss average : " + str(total_loss / len(TestLoader)) + "\n")

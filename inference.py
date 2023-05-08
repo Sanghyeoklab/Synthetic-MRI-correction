@@ -5,6 +5,9 @@ import os
 import torch
 import numpy as np
 from tqdm import tqdm
+import torchvision.transforms.functional as F
+from torchvision.transforms import InterpolationMode
+
 class Compose(object):
     def __init__(self, transform):
         self.transform = transform 
@@ -19,14 +22,21 @@ class ToTensor(object):
         input = torch.Tensor(input).unsqueeze(0)
         return input
 
+class Resize(object):
+    def __init__(self, args):
+        self.imgSize = args.imgSize
+    def __call__(self, input):
+        input = F.resize(input, self.imgSize, interpolation = InterpolationMode.BICUBIC, antialias = True)
+        return input
+
 class Normalize(object):
     def __init__(self, args):
         self.inputNormalize = []
         for k in args.Input:
             self.inputNormalize.append(args.Normalize[k])
     def __call__(self, input):
-        for i in range(input.shape[0]): 
-            input[i] = (input[i] - self.inputNormalize[i][0]) / self.inputNormalize[i][1]
+        for i, [mean, std] in enumerate(self.inputNormalize): 
+            input[:, i] = (input[:, i] - mean) / std
         return input
 
 
@@ -34,7 +44,7 @@ class Normalize(object):
 parser = argparse.ArgumentParser(prog = 'Synthetic MRI artifact correction', description = 'inference')
 parser.add_argument('--config', help = 'Get parameters', default = 'Config/config.yaml')
 parser.add_argument('--load_folder', help = 'Get dicom bundle folder path', default = '../Data/')
-parser.add_argument('--Save_folder', help = 'Dicom save folder path', default = 'inference/')
+parser.add_argument('--Save_folder', help = 'Dicom save folder path', default = 'Save/inference/')
 args = parser.parse_args()
 
 load_folder = args.load_folder
@@ -46,6 +56,7 @@ if Save_folder[-1] != "/":
 os.makedirs(Save_folder, exist_ok=True)
 args = Util.make_args(Util.yaml2dic(args.config))
 
+args.device = [1, 2]
 os.environ["CUDA_VISIBLE_DEVICES"] = ",".join(str(x) for x in args.device)
 
 model = Create_model(args)
@@ -68,4 +79,4 @@ for l in tqdm(lists):
     with torch.no_grad():
         output = model(imgs).cpu().numpy()[0, 0]
     output = output * args.Normalize["Convention method"][1] + args.Normalize["Convention method"][0]
-    Util.save_dicom(output, Save_folder + l, load_folder + args.Input_path["Convention method"] + l, "Deeplearning correction")
+    Util.save_dicom(output, Save_folder + l, load_folder + args.Input_path["T2 FLAIR"] + l, "Deeplearning correction")

@@ -44,10 +44,11 @@ class Synthetic_dataset(object):
             mask = None
         if self.transform is not None: 
             input_imgs, output_imgs, mask = self.transform(input_imgs, output_imgs, mask)
+        
         if mask is not None:
-            return {"input imgs": input_imgs, "output imgs" : output_imgs, "Mask" : mask}
+            return {"input imgs": input_imgs, "target imgs" : output_imgs, "masks" : mask}
         else:
-            return {"input imgs": input_imgs, "output imgs" : output_imgs}
+            return {"input imgs": input_imgs, "target imgs" : output_imgs}
     
 def Loader(args, Mode = "Train", transform = None):
     dataset = Synthetic_dataset(args, Mode, transform)
