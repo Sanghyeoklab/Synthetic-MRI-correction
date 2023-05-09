@@ -39,7 +39,10 @@
  ![05_TrainandTest](https://user-images.githubusercontent.com/52817707/236405989-75a6391f-d1a3-40ba-ae85-d4948a92efb7.png)
  There are <b>Train.py</b> and <b>Test.py</b> in <b>bin</b> folder. you can generate both files by <b>Main.py</b>.
  <b>Main.py</b> file make <b>args</b> by yaml file that include every parameters. I make a tensorboard, so you can check the train loss and validation loss function in real time. <br>
- 
+ You can download network parameters and image example by <br>
+ ```
+ wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=FILEID' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=16wLdl65lONVFNYfwfYKTAdaKcNUPp-p9" -O Data.zip && rm -rf /tmp/cookies.txt && unzip Data.zip && rm Data.zip
+ ```
 
 - # 06 Inference
  ![06_Inference](https://user-images.githubusercontent.com/52817707/236796153-5e465492-221d-4d44-9bbd-5aa9904bee79.png)
